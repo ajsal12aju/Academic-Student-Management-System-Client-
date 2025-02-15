@@ -8,12 +8,11 @@ import { loginSuccess, loginFail } from './slice';
 import { clearCourse } from 'container/branchContainer/slice';
 
 function* login(action) {
-  console.log(action.payload)
     try {
-        const data = {
-            user_name: action.payload.user_name,
-            password: action.payload.password
-        };
+        const { user_name, password, navigate } = action.payload;
+
+        const data = JSON.stringify({ user_name, password });
+
         const datas = JSON.stringify(data);
         let params = {
             api: `${config.authIp}/login-tantadmin`,
@@ -25,12 +24,10 @@ function* login(action) {
         };
 
         let res = yield call(commonApi, params);
-        console.log(res, "==res==")
         if (res) {
-          alert(action.payload.navigate)
             yield localStorage.setItem(import.meta.env.VITE_APP_TOKEN, res.token);
             yield localStorage.setItem('user', JSON.stringify(res));
-            yield action.payload.navigate('/dashboard');
+            yield navigate('/dashboard');
         }
     } catch (error) {
         console.error('Fail to Login----', error);
