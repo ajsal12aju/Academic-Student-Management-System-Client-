@@ -4,13 +4,21 @@ import * as Yup from 'yup';
 import { TextField, Button, Typography, Box, Container, Grid, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import WelcomeImage from 'assets/images/Onboarding-amico.svg';
-const LoginSchema = Yup.object().shape({
-    email: Yup.string().email('Invalid email').required('Required'),
-    password: Yup.string().required('Required')
-});
+
+import { useDispatch, useSelector } from 'react-redux';
+import { userLogin } from 'container/LoginContainer/slice'; // Import login action
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { loading } = useSelector((state) => state.login.loading);
+
+    const LoginSchema = Yup.object().shape({
+        user_name: Yup.string().required('Required'),
+        password: Yup.string().required('Required')
+    });
 
     return (
         <Grid container sx={{ height: '100vh' }}>
@@ -55,31 +63,30 @@ const LoginPage = () => {
                             Welcome Back
                         </Typography>
                         <Typography variant="h4" color="gray">
-                            Please sign in to your account 
+                            Please sign in to your account
                         </Typography>
                     </Box>
 
                     <Formik
-                        initialValues={{ email: '', password: '' }}
+                        initialValues={{ user_name: '', password: '' }}
                         validationSchema={LoginSchema}
-                        onSubmit={(values, actions) => {
-                            console.log(values);
-                            actions.setSubmitting(false);
+                        onSubmit={(values) => {
+                            dispatch(userLogin({ ...values, navigate })); // ✅ Include navigate
                         }}
                     >
-                        {({ errors, touched, isSubmitting }) => (
+                        {({ errors, touched }) => (
                             <Form>
                                 <Box mb={3}>
                                     <Field
                                         as={TextField}
                                         fullWidth
-                                        id="email"
-                                        name="email"
-                                        label="Email address"
+                                        id="user_name"
+                                        name="user_name"
+                                        label="User Name"
                                         variant="outlined"
                                         margin="normal"
-                                        error={Boolean(errors.email && touched.email)}
-                                        helperText={errors.email && touched.email ? errors.email : ''}
+                                        error={Boolean(errors.user_name && touched.user_name)}
+                                        helperText={errors.user_name && touched.user_name ? errors.user_name : ''}
                                         InputProps={{
                                             sx: { color: 'white', backgroundColor: '#121212' }
                                         }}
@@ -148,9 +155,9 @@ const LoginPage = () => {
                                         fontWeight: 'bold',
                                         py: 1.5
                                     }}
-                                    disabled={isSubmitting}
+                                    disabled={loading}
                                 >
-                                    Sign in
+                                    {loading ? 'Signing in...' : 'Sign in'}
                                 </Button>
                             </Form>
                         )}
