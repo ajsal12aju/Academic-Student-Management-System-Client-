@@ -12,14 +12,12 @@ function* login(action) {
         const { user_name, password, navigate } = action.payload;
 
         const data = JSON.stringify({ user_name, password });
-
-        const datas = JSON.stringify(data);
         let params = {
-            api: `${config.authIp}/login-tantadmin`,
+            api: `${config.authIp}/login`,
             method: 'POST',
             successAction: loginSuccess(),
             failAction: loginFail(),
-            body: datas,
+            body: data,
             authourization: null
         };
 
