@@ -41,11 +41,36 @@ const loginSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
-        userlogout: () => {}
+        userLogout: (state) => {
+            state.loading = true;
+            state.error = null;
+        },
+
+        logoutSuccess: (state) => {
+            state.loading = false;
+            state.user = null; // Clear user data
+            toast.success('Logout successful');
+        },
+
+        logoutFail: (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+            toast.error('Logout failed');
+        }
     }
 });
 
-export const { userLogin, loginSuccess, loginFail, userlogout, getLoginUser, getLoginUserSuccess, getLoginUserFail } = loginSlice.actions;
+export const {
+    userLogin,
+    loginSuccess,
+    loginFail,
+    userLogout,
+    logoutSuccess,
+    logoutFail,
+    getLoginUser,
+    getLoginUserSuccess,
+    getLoginUserFail
+} = loginSlice.actions;
 export const selectError = (state) => state.login.error;
 
 export default loginSlice.reducer;

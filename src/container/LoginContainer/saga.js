@@ -4,7 +4,7 @@ import { takeEvery, call, put } from 'redux-saga/effects';
 
 import commonApi from '../api';
 import config from '../../config';
-import { loginSuccess, loginFail } from './slice';
+import { loginSuccess, loginFail, logoutSuccess, logoutFail } from './slice';
 import { clearCourse } from 'container/branchContainer/slice';
 
 function* login(action) {
@@ -31,18 +31,47 @@ function* login(action) {
         console.error('Fail to Login----', error);
     }
 }
-function* logout() {
+
+function* logout(action) {
     try {
-        yield localStorage.removeItem(import.meta.env.VITE_APP_TOKEN);
+        const { navigate } = action.payload;
+
+        let params = {
+            api: `${config.authIp}/logout`,
+            method: 'POST',
+            successAction: logoutSuccess(),
+            failAction: logoutFail(),
+            withCredentials: true
+        };
+
+        yield call(commonApi, params);
+
+        localStorage.removeItem(import.meta.env.VITE_APP_TOKEN);
+        localStorage.removeItem('user');
+
+        yield put(clearUser());
         yield put(clearCourse());
-        window.location.href = '/login';
+
+        navigate('/dashboard');
+
     } catch (error) {
-        console.error('Fail to LogOut----', error);
+        console.error('Fail to Logout ----', error);
     }
 }
 
+
+// function* logout() {
+//     try {
+//         yield localStorage.removeItem(import.meta.env.VITE_APP_TOKEN);
+//         yield put(clearCourse());
+//         window.location.href = '/login';
+//     } catch (error) {
+//         console.error('Fail to LogOut----', error);
+//     }
+// }
+
 export default function* LoginActionWatcher() {
     yield takeEvery('login/userLogin', login);
-    yield takeEvery('login/userlogout', logout);
+    yield takeEvery('login/userLogout', logout);
     // yield takeEvery('login/getLoginUser', getLoginUserDetail);
 }

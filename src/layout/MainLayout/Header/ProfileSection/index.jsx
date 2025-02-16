@@ -31,7 +31,7 @@ import User1 from 'assets/images/users/user-round.svg';
 
 // assets
 import { IconLogout, IconSettings } from '@tabler/icons-react';
-import { userlogout } from 'container/LoginContainer/slice';
+import { userLogout } from 'container/LoginContainer/slice';
 
 // ==============================|| PROFILE MENU ||============================== //
 
@@ -44,14 +44,13 @@ const ProfileSection = () => {
     const [open, setOpen] = useState(false);
 
     const user = JSON.parse(localStorage.getItem('user'));
-
     /**
      * anchorRef is used on different componets and specifying one type leads to other components throwing an error
      * */
     const anchorRef = useRef(null);
 
     const handleLogout = async () => {
-        dispatch(userlogout({}));
+        dispatch(userLogout({ navigate }));
     };
 
     const handleClose = (event) => {
@@ -154,10 +153,10 @@ const ProfileSection = () => {
                                             <Stack direction="row" spacing={0.5} alignItems="center">
                                                 <Typography variant="h4">Good Morning,</Typography>
                                                 <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
-                                                    {user?.user || 'Admin'}
+                                                    {user?.name || 'Admin'}
                                                 </Typography>
                                             </Stack>
-                                            <Typography variant="subtitle2"> {user?.branch?.branch_name || 'diat'}</Typography>
+                                            <Typography variant="subtitle2">{user?.institution?.name || 'diat'}</Typography>
                                         </Stack>
 
                                         <Divider />
