@@ -7,7 +7,8 @@ const loginSlice = createSlice({
     initialState: {
         data: {},
         loading: false,
-        error: null
+        error: null,
+        themeMode: 'dark'
     },
     reducers: {
         userLogin: (state) => {
@@ -56,6 +57,9 @@ const loginSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
             toast.error('Logout failed');
+        },
+        toggleTheme(state) {
+            state.themeMode = state.themeMode === 'light' ? 'dark' : 'light';
         }
     }
 });
@@ -65,6 +69,7 @@ export const {
     loginSuccess,
     loginFail,
     userLogout,
+    toggleTheme,
     logoutSuccess,
     logoutFail,
     getLoginUser,
