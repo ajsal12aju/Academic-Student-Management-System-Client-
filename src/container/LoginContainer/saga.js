@@ -5,7 +5,7 @@ import { takeEvery, call, put } from 'redux-saga/effects';
 import commonApi from '../api';
 import config from '../../config';
 import { loginSuccess, loginFail, logoutSuccess, logoutFail } from './slice';
-import { clearCourse } from 'container/branchContainer/slice';
+import { clearBranches } from 'container/branchContainer/slice';
 
 function* login(action) {
     try {
@@ -50,7 +50,7 @@ function* logout(action) {
         localStorage.removeItem('user');
 
         yield put(clearUser());
-        yield put(clearCourse());
+        yield put(clearBranches());
 
         navigate('/dashboard');
 

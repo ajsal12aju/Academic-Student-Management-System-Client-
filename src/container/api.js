@@ -17,6 +17,8 @@ function* commonApi(value) {
               : token
         : token;
 
+        console.log(authorization, "==auth==")
+
     const authHeader = {
         Accept: 'application/json',
         Authorization: authorization,
@@ -29,6 +31,8 @@ function* commonApi(value) {
     };
 
     const headers = value.authourization !== null ? authHeader : noauthHeader;
+
+    console.log(headers, "==dee==")
 
     try {
         const isFormData = value.body instanceof FormData;

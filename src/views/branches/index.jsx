@@ -17,8 +17,8 @@ import {
     Grid,
     Typography
 } from '@mui/material';
-import { getBranchList } from 'container/branchContainer/slice'; // adjust slice path if needed
-import BranchDrawer from './BranchDrawer';
+import { getBranches } from 'container/branchContainer/slice'; // adjust slice path if needed
+import BranchDrawer from './AddBranches';
 import { useTheme } from '@emotion/react';
 import { formatDate } from 'utils/formateDate';
 
@@ -38,7 +38,7 @@ const BranchTable = () => {
     const [searchField, setSearchField] = useState('name'); // assume branch has a name field
 
     useEffect(() => {
-        dispatch(getBranchList({}));
+        dispatch(getBranches({}));
     }, [dispatch]);
 
     const branchListData = useSelector((state) => state.branch?.branchList || null);
